@@ -6,8 +6,11 @@ livro('Clean Code', 'Robert C. Martin', 'Tecnologia', [9, 8, 10, 9]).
 livro('Duna', 'Frank Herbert', 'Ficcao Cientifica', [10, 9, 9, 8]).
 
 % Regra para listar livros de uma categoria específica
-listar_livros_categoria(Categoria, Titulo, Autor, Notas) :-
-    livro(Titulo, Autor, Categoria, Notas).
+listar_livros_por_categoria(Categoria) :-
+    livro(Titulo, Autor, Categoria, Notas),
+    format('Titulo = ~w, Autor = ~w, Notas = ~w~n', [Titulo, Autor, Notas]),
+    fail.
+listar_livros_por_categoria(_).
 
 % Regra para calcular a média das notas de um livro
 media_notas(Titulo, Media) :-
