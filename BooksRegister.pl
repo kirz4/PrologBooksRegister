@@ -1,4 +1,6 @@
-% Inicializa a lista de livros
+:- dynamic(livros/1).
+
+% Inicializa a lista de livros com os valores padrão
 livros_iniciais([
     livro('1984', 'George Orwell', 'Ficcao Cientifica', [9, 10, 8, 9]),
     livro('O Senhor dos Aneis', 'J.R.R. Tolkien', 'Fantasia', [10, 10, 9, 10]),
@@ -7,32 +9,53 @@ livros_iniciais([
     livro('Duna', 'Frank Herbert', 'Ficcao Cientifica', [10, 9, 9, 8])
 ]).
 
-
-% Recupera a lista inicial de livros
-livros(LivrosAtuais) :-
-    livros_iniciais(LivrosAtuais).
+% Inicializa a lista dinâmica de livros
+inicializar_livros :-
+    retractall(livros(_)),
+    livros_iniciais(LivrosAtuais),
+    assertz(livros(LivrosAtuais)).
 
 % Adicionar novos livros à lista
-adicionar_livro(Titulo, Autor, Categoria, Notas, LivrosAtuais, NovosLivros) :-
-    append(LivrosAtuais, [livro(Titulo, Autor, Categoria, Notas)], NovosLivros).
+adicionar_livro(Titulo, Autor, Categoria, Notas) :-
+    livros(LivrosAtuais),
+    append(LivrosAtuais, [livro(Titulo, Autor, Categoria, Notas)], NovosLivros),
+    retractall(livros(_)),
+    assertz(livros(NovosLivros)),
+    format('Livro ~w registrado com sucesso!~n', [Titulo]).
 
 % Listar todos os livros
-listar_livros([]) :-
-    write('Nenhum livro encontrado!'), nl.
+listar_livros :-
+    livros(LivrosAtuais),
+    (LivrosAtuais = [] ->
+        write('Nenhum livro encontrado!'), nl;
+        listar_livros(LivrosAtuais)
+    ).
+
+listar_livros([]).
 listar_livros([livro(Titulo, Autor, Categoria, Notas) | Resto]) :-
     format('Titulo: ~w, Autor: ~w, Categoria: ~w, Notas: ~w~n', [Titulo, Autor, Categoria, Notas]),
     listar_livros(Resto).
 
 % Listar livros por categoria
-listar_livros_por_categoria(_, []) :-
-    writeln('Nenhum livro encontrado para esta categoria.').
-listar_livros_por_categoria(Categoria, [livro(Titulo, Autor, Categoria, Notas) | Resto]) :-
-    format('Titulo: ~w, Autor: ~w, Notas: ~w~n', [Titulo, Autor, Notas]),
-    listar_livros_por_categoria(Categoria, Resto).
-listar_livros_por_categoria(Categoria, [_ | Resto]) :-
-    listar_livros_por_categoria(Categoria, Resto).
+listar_livros_por_categoria(Categoria) :-
+    livros(LivrosAtuais),
+    incluir_livros_por_categoria(Categoria, LivrosAtuais, Resultado),
+    (Resultado = [] ->
+        write('Nenhum livro encontrado para esta categoria.'), nl;
+        listar_livros(Resultado)
+    ).
+
+incluir_livros_por_categoria(_, [], []).
+incluir_livros_por_categoria(Categoria, [livro(Titulo, Autor, Categoria, Notas) | Resto], [livro(Titulo, Autor, Categoria, Notas) | Resultado]) :-
+    incluir_livros_por_categoria(Categoria, Resto, Resultado).
+incluir_livros_por_categoria(Categoria, [_ | Resto], Resultado) :-
+    incluir_livros_por_categoria(Categoria, Resto, Resultado).
 
 % Calcular a média das notas de um livro
+media_notas(Titulo, Media) :-
+    livros(LivrosAtuais),
+    media_notas(Titulo, LivrosAtuais, Media).
+
 media_notas(_, [], _) :-
     writeln('Livro não encontrado.').
 media_notas(Titulo, [livro(Titulo, _, _, Notas) | _], Media) :-
@@ -56,29 +79,32 @@ comprimento([_ | T], Comprimento) :-
     Comprimento is ComprimentoT + 1.
 
 % Criar um novo livro
-criar_livro(LivrosAtuais, NovosLivros) :-
+criar_livro :-
     write('Titulo: '), read_line_to_string(user_input, Titulo),
     write('Autor: '), read_line_to_string(user_input, Autor),
     write('Categoria: '), read_line_to_string(user_input, Categoria),
     write('Notas (ex: [9, 8, 10]): '), read(Notas),
-    adicionar_livro(Titulo, Autor, Categoria, Notas, LivrosAtuais, NovosLivros),
+    adicionar_livro(Titulo, Autor, Categoria, Notas),
     format('Livro ~w registrado com sucesso!~n', [Titulo]).
 
 % Adicionar uma nova nota a um livro existente
-adicionar_nota(Titulo, NovaNota, NovosLivros) :-
-    livros(LivrosAtuais),  % Recupera os livros atuais
-    atualizar_livros(Titulo, NovaNota, LivrosAtuais, [], NovosLivros),  % Atualiza a lista de livros
-    format('Lista de livros atualizada: ~w~n', [NovosLivros]).  % Exibe a lista atualizada
+adicionar_nota(Titulo, NovaNota) :-
+    livros(LivrosAtuais),
+    atualizar_livros(Titulo, NovaNota, LivrosAtuais, [], NovosLivros),
+    retractall(livros(_)),
+    assertz(livros(NovosLivros)),
+    format('Lista de livros atualizada: ~w~n', [NovosLivros]).
 
 % Atualizar os livros na lista
-atualizar_livros(_, _, [], Atualizados, Atualizados) :-
-    write('Livro nao encontrado! Lista Atual: '), write(Atualizados), nl.
+atualizar_livros(_, _, [], Atualizados, Atualizados) :- !.
 atualizar_livros(Titulo, NovaNota, [livro(Titulo, Autor, Categoria, Notas) | Resto], Atualizados, NovosLivros) :-
     write('Atualizando livro: '), write(Titulo), nl,
-    append(Notas, [NovaNota], NovasNotas),  % Adiciona a nova nota
-    append(Atualizados, [livro(Titulo, Autor, Categoria, NovasNotas)], LivrosParciais),  % Atualiza a lista parcial
+    append(Notas, [NovaNota], NovasNotas),
+    append(Atualizados, [livro(Titulo, Autor, Categoria, NovasNotas)], LivrosParciais),
     atualizar_livros(Titulo, NovaNota, Resto, LivrosParciais, NovosLivros).
 atualizar_livros(Titulo, NovaNota, [Livro | Resto], Atualizados, NovosLivros) :-
     append(Atualizados, [Livro], LivrosParciais),
     atualizar_livros(Titulo, NovaNota, Resto, LivrosParciais, NovosLivros).
 
+% Inicializa a lista ao carregar o código
+:- initialization(inicializar_livros).
