@@ -54,17 +54,23 @@ incluir_livros_por_categoria(Categoria, [_ | Resto], Resultado) :-
 % Calcular a média das notas de um livro
 media_notas(Titulo, Media) :-
     livros(LivrosAtuais),
-    media_notas(Titulo, LivrosAtuais, Media).
+    media_notas_aux(Titulo, LivrosAtuais, Media).
 
-media_notas(_, [], _) :-
-    writeln('Livro não encontrado.').
-media_notas(Titulo, [livro(Titulo, _, _, Notas) | _], Media) :-
+% Caso em que o livro não é encontrado
+media_notas_aux(_, [], _) :-
+    write('Livro nao encontrado.'), nl,
+    fail.
+
+% Caso em que o livro é encontrado
+media_notas_aux(Titulo, [livro(Titulo, _, _, Notas) | _], Media) :-
     soma_lista(Notas, Soma),
     comprimento(Notas, Comprimento),
     Comprimento > 0,
     Media is Soma / Comprimento.
-media_notas(Titulo, [_ | Resto], Media) :-
-    media_notas(Titulo, Resto, Media).
+
+% Continuar procurando se o livro ainda não foi encontrado
+media_notas_aux(Titulo, [_ | Resto], Media) :-
+    media_notas_aux(Titulo, Resto, Media).
 
 % Função auxiliar para somar os elementos de uma lista
 soma_lista([], 0).
@@ -80,9 +86,9 @@ comprimento([_ | T], Comprimento) :-
 
 % Criar um novo livro
 criar_livro :-
-    write('Titulo: '), read_line_to_string(user_input, Titulo),
-    write('Autor: '), read_line_to_string(user_input, Autor),
-    write('Categoria: '), read_line_to_string(user_input, Categoria),
+    write('Titulo: '), read(Titulo),
+    write('Autor: '), read(Autor),
+    write('Categoria: '), read(Categoria),
     write('Notas (ex: [9, 8, 10]): '), read(Notas),
     adicionar_livro(Titulo, Autor, Categoria, Notas),
     format('Livro ~w registrado com sucesso!~n', [Titulo]).
