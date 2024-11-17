@@ -86,21 +86,24 @@ comprimento([_ | T], Comprimento) :-
 
 % Criar um novo livro
 criar_livro :-
-    write('Titulo: '), read(Titulo),
-    write('Autor: '), read(Autor),
-    write('Categoria: '), read(Categoria),
-    write('Notas (ex: [9, 8, 10]): '), read(Notas),
+    write('Por favor, insira as informacoes solicitadas e finalize cada entrada com um ponto final (.)'), nl,
+    write('Titulo (entre aspas): '), flush_output, read(Titulo),
+    write('Autor (entre aspas): '), flush_output, read(Autor),
+    write('Categoria (entre aspas): '), flush_output, read(Categoria),
+    write('Notas (ex: [9, 8, 10]): '), flush_output, read(Notas),
     adicionar_livro(Titulo, Autor, Categoria, Notas),
-    format('Livro ~w registrado com sucesso!~n', [Titulo]).
+    format('Livro "~w" registrado com sucesso!~n', [Titulo]).
 
 % Adicionar uma nova nota a um livro existente
 adicionar_nota(Titulo, NovaNota) :-
     livros(LivrosAtuais),
     atualizar_livros(Titulo, NovaNota, LivrosAtuais, [], NovosLivros),
-    retractall(livros(_)),
-    assertz(livros(NovosLivros)),
-    format('Lista de livros atualizada: ~w~n', [NovosLivros]).
-
+    (LivrosAtuais == NovosLivros ->
+        format('Livro "~w" nao foi encontrado.~n', [Titulo]);
+        (retractall(livros(_)),
+         assertz(livros(NovosLivros)),
+         format('Lista de livros atualizada: ~w~n', [NovosLivros]))
+    ).
 % Atualizar os livros na lista
 atualizar_livros(_, _, [], Atualizados, Atualizados) :- !.
 atualizar_livros(Titulo, NovaNota, [livro(Titulo, Autor, Categoria, Notas) | Resto], Atualizados, NovosLivros) :-
