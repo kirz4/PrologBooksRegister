@@ -10,10 +10,10 @@ Este projeto é uma aplicação desenvolvida em **Prolog** para gerenciar uma co
 ### Função para Compilar Arquivo
 - Certifique-se de que o GNU Prolog está instalado e configurado no seu sistema. Compile o arquivo principal do projeto:
 
-'''prolog
+```prolog
+?- ['D://Repositorios/Prolog/Booksregister.pl'].
+```
 
-['D://Repositorios/Prolog/Booksregister.pl'].
-'''
 ### 📂 Inicializar Lista de Livros
 - A lista é automaticamente inicializada com valores padrão ao carregar o programa.
 - É possível redefinir a lista com novos livros manualmente.
