@@ -1,88 +1,140 @@
-Gerenciador de Livros em Prolog
-===============================
+### 📚 Gerenciador de Livros em Prolog
+---
 
-Este projeto é uma aplicação em Prolog para gerenciar uma lista de livros. Ele permite adicionar livros, listar por categoria, calcular a média de notas e gerenciar a lista de forma dinâmica.
+Este projeto é uma aplicação desenvolvida em **Prolog** para gerenciar uma coleção de livros. Com ele, você pode adicionar novos livros, listar por categoria, calcular a média das notas atribuídas e gerenciar a lista de forma dinâmica.
 
-Funcionalidades Principais
+---
 
-Inicializar Lista de Livros
+## 🛠️ Funcionalidades Principais
 
-*   A lista de livros é inicializada com valores padrão ao carregar o programa.
-    
-*   É possível redefinir a lista com novos livros.
-    
+### Função para Compilar Arquivo
+- Certifique-se de que o GNU Prolog está instalado e configurado no seu sistema. Compile o arquivo principal do projeto:
 
-Adicionar Livros
+- '''prolog
 
-*   Insira detalhes como título, autor, categoria e notas.
-    
-*   Os livros são armazenados dinamicamente.
-    
+['D://Repositorios/Prolog/Booksregister.pl'].
 
-Listar Livros
+### 📂 Inicializar Lista de Livros
+- A lista é automaticamente inicializada com valores padrão ao carregar o programa.
+- É possível redefinir a lista com novos livros manualmente.
 
-*   Exibe todos os livros cadastrados.
-    
-*   Filtre os livros por categoria.
-    
+### ➕ Adicionar Livros
+- Permite adicionar um livro informando:
+  - **Título**
+  - **Autor**
+  - **Categoria**
+  - **Notas** (lista de notas)
+- Os livros são armazenados de forma dinâmica para fácil atualização.
 
-Gerenciar Notas
+### 📋 Listar Livros
+- **Listar todos os livros** cadastrados.
+- **Filtrar livros por categoria** para uma busca mais eficiente.
 
-*   Calcule a média das notas de um livro específico.
-    
-*   Adicione novas notas a um livro existente.
-    
+### 📝 Gerenciar Notas
+- Calcular a **média das notas** de um livro específico.
+- Adicionar novas notas a livros já cadastrados.
 
-Funções Auxiliares
+### 🔧 Funções Auxiliares
+- Calcular a **soma** e o **comprimento de listas** para diversas operações internas.
 
-*   Calcule a soma e o comprimento de listas para operações diversas.
-    
+---
 
-Como Utilizar
+## 🚀 Como Utilizar
 
-Inicializar a ListaAo carregar o código, a lista de livros padrão será inicializada automaticamente:
+Certifique-se de ter um ambiente **Prolog** instalado (recomendado: **SWI-Prolog**). 
 
-prolog?- inicializar\_livros.
+### ⚙️ Inicializar a Lista
+Ao carregar o código, a lista de livros padrão será automaticamente inicializada:
 
-Adicionar um LivroUse a função adicionar\_livro/4:
+```prolog
+?- inicializar_livros.
+```
 
-prolog?- adicionar\_livro('Novo Livro', 'Autor Exemplo', 'Categoria Exemplo', \[8, 9, 7\]).
+### ➕ Adicionar um Livro
+Para adicionar um livro manualmente, utilize a função `adicionar_livro/4`:
 
-Ou utilize o modo interativo:
+```prolog
+?- adicionar_livro('Novo Livro', 'Autor Exemplo', 'Categoria Exemplo', [8, 9, 7]).
+```
 
-prolog?- criar\_livro.
+Ou utilize o modo interativo para uma experiência mais intuitiva:
 
-Listar LivrosListar todos os livros:
+```prolog
+?- criar_livro.
+```
 
-prolog?- listar\_livros.
+### 📋 Listar Livros
+- Para listar **todos os livros**:
 
-Listar por categoria:
+  ```prolog
+  ?- listar_livros.
+  ```
 
-prolog?- listar\_livros\_por\_categoria('Ficcao Cientifica').
+- Para listar **livros por categoria**:
 
-Calcular a Média das NotasCalcule a média de um livro específico:
+  ```prolog
+  ?- listar_livros_por_categoria('Ficcao Cientifica').
+  ```
 
-prolog?- media\_notas('1984', Media).
+### 📝 Calcular a Média das Notas
+Calcule a média de um livro específico com:
 
-Adicionar NotasAdicione uma nova nota a um livro:
+```prolog
+?- media_notas('1984', Media).
+```
 
-prolog?- adicionar\_nota('1984', 10).
+### ➕ Adicionar Notas a um Livro
+Adicione uma nova nota a um livro existente:
 
-Estrutura dos DadosCada livro é representado por um termo:
+```prolog
+?- adicionar_nota('1984', 10).
+```
 
-prologlivro(Titulo, Autor, Categoria, Notas).
+---
 
-Exemplo:
+## 📊 Estrutura dos Dados
 
-prologlivro('1984', 'George Orwell', 'Ficcao Cientifica', \[9, 10, 8, 9\]).
+Cada livro é representado por um termo:
 
-Requisitos
+```prolog
+livro(Titulo, Autor, Categoria, Notas).
+```
 
-*   Prolog: Ambiente compatível com o SWI-Prolog ou outra implementação.
-    
+**Exemplo**:
 
-InicializaçãoA lista de livros é inicializada automaticamente ao carregar o programa:
+```prolog
+livro('1984', 'George Orwell', 'Ficcao Cientifica', [9, 10, 8, 9]).
+```
 
-prolog:- initialization(inicializar\_livros).
+---
 
-ContribuiçõesSinta-se à vontade para adicionar novas funcionalidades, melhorar a lógica ou adaptar o código para novos casos de uso. Feedbacks são bem-vindos! 🚀
+## 📦 Requisitos
+
+Certifique-se de ter o **SWI-Prolog** ou outro ambiente compatível instalado:
+
+- **Prolog**: Ambiente de desenvolvimento compatível
+- **Versão Recomendável**: SWI-Prolog
+
+### 🔄 Inicialização Automática
+
+A lista de livros é inicializada automaticamente ao carregar o programa:
+
+```prolog
+:- initialization(inicializar_livros).
+```
+
+---
+
+## 🤝 Contribuições
+
+Contribuições são **bem-vindas**! Sinta-se à vontade para:
+- Adicionar novas funcionalidades.
+- Melhorar a lógica ou otimizar o código existente.
+- Adaptar o projeto para outros casos de uso.
+
+Qualquer feedback é muito bem-vindo! 🚀
+
+---
+
+## 📄 Licença
+Este projeto é open-source e está sob a licença **MIT**. Sinta-se à vontade para utilizá-lo e adaptá-lo conforme necessário.
