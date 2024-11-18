@@ -41,7 +41,7 @@ Este projeto é uma aplicação desenvolvida em **Prolog** para gerenciar uma co
 
 ## 🚀 Como Utilizar
 
-Certifique-se de ter um ambiente **Prolog** instalado (recomendado: **SWI-Prolog**). 
+Certifique-se de ter um ambiente **Prolog** instalado (recomendado: **GNU-Prolog**). 
 
 ### ⚙️ Inicializar a Lista
 Ao carregar o código, a lista de livros padrão será automaticamente inicializada:
